@@ -17,7 +17,8 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		return View::make('hello');
+        $this->layout->content = 'test shit';
+//		return View::make('hello');
 	}
 
 }
