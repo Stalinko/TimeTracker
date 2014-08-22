@@ -1,6 +1,6 @@
 <?php
 
-class HomeController extends BaseController {
+class IndexController extends BaseController {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -15,10 +15,19 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+    public function anyIndex(){
+        return Redirect::to('/enter');
+    }
+
+	public function getEnter()
 	{
-        $this->layout->content = 'test shit';
-//		return View::make('hello');
+        $this->layout->content = View::make('enter');
 	}
+
+    public function postEnter(){
+        if(Auth::attempt([]))
+
+        return Redirect::to('/enter');
+    }
 
 }

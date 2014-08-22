@@ -11,10 +11,13 @@
 |
 */
 
-Route::get('/', 'HomeController@showWelcome');
+Route::controller('/', 'IndexController');
+
+
 Route::get('users', function()
 {
     $users = User::all();
 
     return View::make('users')->with('users', $users);
 });
+
