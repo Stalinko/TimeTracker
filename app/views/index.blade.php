@@ -14,17 +14,17 @@
     @endif
 </div>
 
-<table class="table table-bordered table-hover table-condensed timetable">
+<table class="table table-hover table-condensed timetable">
     <tr>
-        <th>Date</th>
-        <th>Time &sum;</th>
-        <th>Description</th>
-        <th></th>
+        <th class="col-date">Date</th>
+        <th class="col-time">Time &sum;</th>
+        <th class="col-desc">Description</th>
+        <th>&nbsp;</th>
     </tr>
-    <tr>
-        <td><input></td>
-        <td><input></td>
-        <td><input></td>
-        <td><input></td>
+    <tr class="input-row">
+        <td><input id="input-date" value="{{ date('Y-m-d') }}"></td>
+        <td><input id="input-time"></td>
+        <td><input id="input-desc"></td>
+        <td><button class="btn">Add record</button></td>
     </tr>
 </table>

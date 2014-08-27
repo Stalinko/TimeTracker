@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUser extends Migration {
+class Records extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,15 +13,16 @@ class CreateUser extends Migration {
 	public function up()
 	{
         DB::statement('
-            CREATE TABLE users (
+            CREATE TABLE records (
               id int(10) unsigned NOT NULL AUTO_INCREMENT,
-              email varchar(255) NOT NULL,
-              password varchar(255) NOT NULL,
-              remember_token VARCHAR (100) NOT NULL DEFAULT "",
+              user_id int unsigned NOT NULL,
+              `date` date NOT NULL,
+              `time` int unsigned NOT NULL,
+              description VARCHAR (1024) NOT NULL DEFAULT "",
               created_at DATETIME NOT NULL,
               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
-              UNIQUE KEY emun (email)
+              KEY (`date`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
 	}
@@ -33,6 +34,7 @@ class CreateUser extends Migration {
 	 */
 	public function down()
 	{
+		Schema::drop('records');
 	}
 
 }

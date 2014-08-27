@@ -4,3 +4,23 @@
 .timetable {
   margin-top: 20px;
 }
+.timetable .col-date {
+  width: 10%;
+}
+.timetable .col-time {
+  width: 5%;
+}
+.timetable .col-desc {
+  width: 70%;
+}
+.timetable .input-row {
+  background: #f0f0f0 !important;
+}
+.timetable .input-row:hover,
+.timetable .input-row:hover td,
+.timetable .input-row:hover th {
+  background: #f0f0f0 !important;
+}
+.timetable .input-row input {
+  width: 100%;
+}

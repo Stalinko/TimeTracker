@@ -82,6 +82,12 @@ class IndexController extends BaseController {
         }
     }
 
+    public function postRecord(){
+        $validator = Validator::make([
+            'date' =>
+        ]);
+    }
+
     public function getLogout(){
         Auth::logout();
         Session::flash('success', 'You logged out');
