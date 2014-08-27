@@ -6,11 +6,13 @@
             <div class="control-group">
                 <span class="help-block">If you don't have an account yet, it will be automatically created</span>
             </div>
-            <div class="control-group">
-                <input type="text" placeholder="Email…" name="email" class="span12">
+            <div class="control-group @if($errors->has('email')) error @endif">
+                <input type="text" placeholder="Email…" name="email" class="span12" value="{{{ Input::old('email') }}}">
+                <span class="help-inline">{{{ $errors->first('email') }}}</span>
             </div>
-            <div class="control-group">
+            <div class="control-group @if($errors->has('password')) error @endif">
                 <input type="password" placeholder="Password…" name="password" class="span12">
+                <span class="help-inline">{{{ $errors->first('password') }}}</span>
             </div>
             <div class="control-group">
                 <label class="checkbox">

@@ -16,8 +16,10 @@ class CreateUser extends Migration {
             CREATE TABLE users (
               id int(10) unsigned NOT NULL AUTO_INCREMENT,
               email varchar(255) NOT NULL,
-              name varchar(255) NOT NULL,
+              password varchar(255) NOT NULL,
               remember_token VARCHAR (100) NOT NULL DEFAULT "",
+              created_at DATETIME NOT NULL,
+              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
               UNIQUE KEY emun (email)
             ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
