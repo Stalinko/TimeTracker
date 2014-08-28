@@ -1,7 +1,6 @@
 <?php
 
 class RecordController extends BaseController {
-
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -9,17 +8,8 @@ class RecordController extends BaseController {
 	 */
 	public function store()
 	{
-        $validator = Validator::make(Input::all(), [
-            'date' => ['required', 'regex:/^\d\d\d\d-\d\d-\d\d$/'],
-            'time' => ['required', 'regex:/^\d*[:,.]?\d+$/'],
-            'description' => 'max:1024',
-        ], [
-            'date' => 'Date must have format "yyyy-mm-dd"',
-            'time' => 'Available time formats: .5 (half hour), 6:15 (6 hours, 15 minutes), 19.50 (19 and a half hours)',
-        ]);
-
-        if($validator->fails()){
-            $result = ['errors' => $validator->messages()->toArray()];
+        if($errors = $this->validateRecord()){
+            $result = ['errors' => $errors];
         }else{
             $record = Record::create(Input::all() + ['user_id' => Auth::id()]);
             $result = ['success' => true, 'record' => $record->toArray()];
@@ -36,7 +26,20 @@ class RecordController extends BaseController {
 	 */
 	public function update($id)
 	{
-		//
+        if($errors = $this->validateRecord()){
+            $result = ['errors' => $errors];
+        }else{
+            $record = Record::where('id', $id)->where('user_id', Auth::id())->first();
+            if(!$record){
+                App::abort(404);
+            }
+
+            $record->fill(Input::all())->save();
+
+            $result = ['success' => true, 'record' => $record->toArray()];
+        }
+
+        return Response::json($result);
 	}
 
 
@@ -52,10 +55,25 @@ class RecordController extends BaseController {
         return Response::json(['success' => (bool)$result]);
 	}
 
-    public function missingMethod($parameters = array())
-    {
-        var_dump($parameters);
-    }
+    /**
+     *
+     * @return bool|\Illuminate\Support\MessageBag|false Errors
+     */
+    private function validateRecord(){
+        $validator = Validator::make(Input::all(), [
+            'date' => ['required', 'regex:/^\d\d\d\d-\d\d-\d\d$/'],
+            'time' => ['required', 'regex:/^\d*[:,.]?\d+$/'],
+            'description' => 'max:1024',
+        ], [
+            'date' => 'Date must have format "yyyy-mm-dd"',
+            'time' => 'Available time formats: .5 (half hour), 6:15 (6 hours, 15 minutes), 19.50 (19 and a half hours)',
+        ]);
 
+        if($validator->fails()){
+            return $validator->messages();
+        }else{
+            return false;
+        }
+    }
 
 }
