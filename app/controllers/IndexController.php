@@ -23,7 +23,16 @@ class IndexController extends BaseController {
             return Redirect::to('/enter');
         }
 
-        $this->layout->content = View::make('index');
+        $records = Record::
+            where('user_id', Auth::id())
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $sum = array_reduce($records->toArray(), function($sum, $row){
+            return $sum + $row['time'];
+        }, 0);
+        $this->layout->content = View::make('index', ['records' => $records, 'sum' => $sum]);
     }
 
     /**
@@ -82,12 +91,34 @@ class IndexController extends BaseController {
         }
     }
 
+    /**
+     * Создание записи
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function postRecord(){
-        $validator = Validator::make([
-            'date' =>
+        $validator = Validator::make(Input::all(), [
+            'date' => ['required', 'regex:/^\d\d\d\d-\d\d-\d\d$/'],
+            'time' => ['required', 'regex:/^\d*[:,.]?\d+$/'],
+            'description' => 'max:1024',
+        ], [
+            'date' => 'Date must have format "yyyy-mm-dd"',
+            'time' => 'Available time formats: .5 (half hour), 6:15 (6 hours, 15 minutes), 19.50 (19 and a half hours)',
         ]);
+
+        if($validator->fails()){
+            $result = ['errors' => $validator->messages()->toArray()];
+        }else{
+            $record = Record::create(Input::all() + ['user_id' => Auth::id()]);
+            $result = ['success' => true, 'record' => $record->toArray()];
+        }
+
+        return Response::json($result);
     }
 
+    /**
+     * Logout
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function getLogout(){
         Auth::logout();
         Session::flash('success', 'You logged out');

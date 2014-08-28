@@ -25,6 +25,19 @@
         <td><input id="input-date" value="{{ date('Y-m-d') }}"></td>
         <td><input id="input-time"></td>
         <td><input id="input-desc"></td>
-        <td><button class="btn">Add record</button></td>
+        <td><button class="btn" id="btn-add-record">Add record</button></td>
+    </tr>
+    @foreach($records as $row)
+    <tr>
+        <td>{{ $row->date }}</td>
+        <td>{{ round($row->time, 2) }}</td>
+        <td>{{ $row->description }}</td>
+        <td></td>
+    </tr>
+    @endforeach
+    <tr>
+        <td></td>
+        <td colspan="2">&sum;: <span id="time-sum">{{ round($sum, 2) }}</span></td>
+        <td></td>
     </tr>
 </table>

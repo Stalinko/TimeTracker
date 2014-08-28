@@ -17,7 +17,7 @@ class Records extends Migration {
               id int(10) unsigned NOT NULL AUTO_INCREMENT,
               user_id int unsigned NOT NULL,
               `date` date NOT NULL,
-              `time` int unsigned NOT NULL,
+              `time` float unsigned NOT NULL,
               description VARCHAR (1024) NOT NULL DEFAULT "",
               created_at DATETIME NOT NULL,
               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
