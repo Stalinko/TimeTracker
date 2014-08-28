@@ -15,7 +15,8 @@
     {{ $content }}
 
 </div>
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="/js/jquery-2.1.1.min.js"></script>
+<script src="/js/underscore-min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/jquery-ui.min.js"></script>
 <script src="/js/scripts.js"></script>

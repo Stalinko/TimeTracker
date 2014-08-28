@@ -28,11 +28,14 @@
         <td><button class="btn" id="btn-add-record">Add record</button></td>
     </tr>
     @foreach($records as $row)
-    <tr>
+    <tr data-id="{{ $row->id }}" class="row-record">
         <td>{{ $row->date }}</td>
         <td>{{ round($row->time, 2) }}</td>
         <td>{{ $row->description }}</td>
-        <td></td>
+        <td>
+              <button class="btn btn-small btn-link btn-delete" title="Edit"><i class="icon-pencil"></i></button>
+              <button class="btn btn-small btn-link btn-delete" title="Remove"><i class="icon-trash"></i></button>
+        </td>
     </tr>
     @endforeach
     <tr>

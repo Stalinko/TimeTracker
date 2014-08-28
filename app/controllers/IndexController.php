@@ -92,30 +92,6 @@ class IndexController extends BaseController {
     }
 
     /**
-     * Создание записи
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function postRecord(){
-        $validator = Validator::make(Input::all(), [
-            'date' => ['required', 'regex:/^\d\d\d\d-\d\d-\d\d$/'],
-            'time' => ['required', 'regex:/^\d*[:,.]?\d+$/'],
-            'description' => 'max:1024',
-        ], [
-            'date' => 'Date must have format "yyyy-mm-dd"',
-            'time' => 'Available time formats: .5 (half hour), 6:15 (6 hours, 15 minutes), 19.50 (19 and a half hours)',
-        ]);
-
-        if($validator->fails()){
-            $result = ['errors' => $validator->messages()->toArray()];
-        }else{
-            $record = Record::create(Input::all() + ['user_id' => Auth::id()]);
-            $result = ['success' => true, 'record' => $record->toArray()];
-        }
-
-        return Response::json($result);
-    }
-
-    /**
      * Logout
      * @return \Illuminate\Http\RedirectResponse
      */
