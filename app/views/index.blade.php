@@ -24,9 +24,9 @@
         <th>&nbsp;</th>
     </tr>
     <tr class="row-input" id="row-add">
-        <td><input class="input-date" value="{{ date('Y-m-d') }}"></td>
-        <td><input class="input-time"></td>
-        <td><input class="input-desc"></td>
+        <td data-toggle="popover"><input class="input-date" value="{{ date('Y-m-d') }}" data-toggle="tooltip" data-placement="top" title="Date in format &quot;yyyy-mm-dd&quot;"></td>
+        <td><input class="input-time" title="Format like 19.5 or 12:45"></td>
+        <td><input class="input-desc" title=""></td>
         <td><button class="btn btn-default" id="btn-add">Add record</button></td>
     </tr>
     @foreach($records as $row)

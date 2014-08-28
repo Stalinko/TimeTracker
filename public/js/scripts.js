@@ -23,15 +23,19 @@ var row_edit_template = _.template(
  * Adding new record
  */
 function addRecord(){
-    $.post('/record', getData($('#row-add')), function(result){
+    var row = $('#row-add');
+    $.post('/record', getData(row), function(result){
+        row.find('input').popover('destroy');
         if(result.success){
             result.record.time = Math.round(result.record.time * 100) / 100;
-            $(row_template(result.record)).insertAfter('#row-add');
+            $(row_template(result.record)).insertAfter(row);
 
             $('#row-add .input-time, #row-add .input-desc').val('');
             $('#row-add .input-time').focus();
 
             updateSum();
+        }else{
+            showErrors(row, result.errors);
         }
     });
 }
@@ -61,6 +65,11 @@ function deleteRecord(){
 function editRecord(){
     var row = $(this).parents('.row-record'),
         record = {id: row.data('id')};
+
+    if(row.attr('id') == 'row-add'){
+        return;
+    }
+
     _.each(['date', 'time', 'desc'], function(name){
         record[name] = row.find('.col-' + name).text();
     });
@@ -72,7 +81,6 @@ function editRecord(){
  * Save edited record
  */
 function updateRecord(){
-    console.log(this);
     var parent = $(this).parents('.row-input'),
         id = parent.data('id');
 
@@ -81,13 +89,32 @@ function updateRecord(){
         type: 'PUT',
         data: getData(parent),
         success: function(result){
+            parent.find('input').popover('destroy');
+
             if(result.success){
                 result.record.time = Math.round(result.record.time * 100) / 100;
                 parent.replaceWith($(row_template(result.record)));
 
                 updateSum();
+            }else{
+                showErrors(parent, result.errors);
             }
         }
+    });
+}
+
+function showErrors(row, errors){
+    var top = true;
+
+    _.each(errors, function(list, field){
+        field = field.replace('description', 'desc');
+        row.find('.input-' + field).popover({
+            content: '<span class="text-danger">' + _.first(list) + '</span>',
+            placement: top ? 'top' : 'bottom',
+            html: true
+        }).popover('show');
+
+        top = !top;
     });
 }
 
@@ -119,12 +146,14 @@ function updateSum(){
  * On startup
  */
 $(function(){
-    $('#input-time').focus();
+    $('#row-add .input-time').focus();
 
-    $('#input-date').datepicker({
+    $('#row-add .input-date').datepicker({
         dateFormat: 'yy-mm-dd',
         firstDay: 1
     });
+
+    $('#row-add input').tooltip();
 
     $(document).on('keyup', '.row-input input', function(e){
         if(e.which == 13){
