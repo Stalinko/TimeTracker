@@ -16,7 +16,7 @@
     @endif
 </div>
 
-<table class="table table-hover table-condensed timetable">
+<table class="table table-condensed timetable">
     <tr>
         <th>Date</th>
         <th>Time &sum;</th>

@@ -29,7 +29,8 @@ class RecordController extends BaseController {
 	public function update($id)
 	{
         if($errors = $this->validateRecord()){
-            $result = ['errors' => $errors];
+            $result = $errors;
+            $code = 400;
         }else{
             $record = Record::where('id', $id)->where('user_id', Auth::id())->first();
             if(!$record){
@@ -38,10 +39,11 @@ class RecordController extends BaseController {
 
             $record->fill(Input::all())->save();
 
-            $result = ['success' => true, 'record' => $record->toArray()];
+            $result = $record->toArray();
+            $code = 200;
         }
 
-        return Response::json($result);
+        return Response::json($result, $code);
 	}
 
 
