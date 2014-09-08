@@ -10,18 +10,20 @@ define([
             'click .btn-update': 'updateRecord',
             'dblclick .row-record td': 'editRecord',
             'click #btn-add': 'addRecord',
-            'keyup .row-input input': 'onKeyUp'
+            'keyup .row-input input': 'onKeyUp',
+            'focus .input-date': 'initDatepicker'
         },
         initialize: function () {
             this.rowAdd = $('#row-add');
+            this.rowAdd.find('.input-time').focus();
+            this.rowAdd.find('input').tooltip();
+        },
 
-            $('#row-add .input-time').focus();
-            $('#row-add .input-date').datepicker({
+        initDatepicker: function(e){
+            $(e.target).datepicker({
                 dateFormat: 'yy-mm-dd',
                 firstDay: 1
             });
-
-            $('#row-add input').tooltip();
         },
 
         rowTemplate: _.template(
