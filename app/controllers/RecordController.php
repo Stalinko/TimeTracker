@@ -9,13 +9,15 @@ class RecordController extends BaseController {
 	public function store()
 	{
         if($errors = $this->validateRecord()){
-            $result = ['errors' => $errors];
+            $result = $errors;
+            $code = 400;
         }else{
             $record = Record::create(Input::all() + ['user_id' => Auth::id()]);
-            $result = ['success' => true, 'record' => $record->toArray()];
+            $result = $record->toArray();
+            $code = 200;
         }
 
-        return Response::json($result);
+        return Response::json($result, $code);
 	}
 
 	/**

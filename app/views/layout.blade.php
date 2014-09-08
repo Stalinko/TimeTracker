@@ -16,10 +16,6 @@
     {{ $content }}
 
 </div>
-<script src="/js/jquery-2.1.1.min.js"></script>
-<script src="/js/underscore-min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/jquery-ui.min.js"></script>
-<script src="/js/scripts.js"></script>
+<script src="/js/libs/require.js" data-main="/js/main"></script>
 </body>
 </html>
