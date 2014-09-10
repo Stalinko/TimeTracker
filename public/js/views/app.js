@@ -11,6 +11,8 @@ define([
                 firstDay: 1
             });
 
+            window.eventManager = _.extend({}, Backbone.Events);
+
             new TimetableLogicView();
             new TimetableBeautyView();
             new MakeReportView();

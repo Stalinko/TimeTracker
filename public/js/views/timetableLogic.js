@@ -14,6 +14,8 @@ define([
         },
 
         initialize: function(){
+            window.eventManager.on('record:add record:update', this.updateSum, this);
+
             this.updateSum();
         },
 
@@ -62,13 +64,14 @@ define([
             model.row.find('.input-time, .input-desc').val('');
             model.row.find('.input-time').focus();
 
-            this.updateSum();
+            window.eventManager.trigger('record:add', model);
         },
 
         successUpdate: function (model) {
             model.row.find('input').popover('destroy');
             model.row.replaceWith(this.rowTemplate(model.getAttrsFormatted()));
-            this.updateSum();
+
+            window.eventManager.trigger('record:update', model);
         },
 
         errorSave: function (model, result) {
