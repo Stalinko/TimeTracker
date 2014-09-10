@@ -48,21 +48,8 @@ class IndexController extends BaseController {
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc');
 
-        if($report){
-            $records = $records->get();
-            $array = $records->toArray();
-        }else{
-            $records = $records->paginate(self::PAGE_SIZE);
-            $array = $records->getCollection()->toArray();
-        }
-
-        $sum = array_reduce($array, function($sum, $row){
-            return $sum + $row['time'];
-        }, 0);
-
         $this->layout->content = View::make('index', [
-            'records' => $records,
-            'sum' => $sum,
+            'records' => $report ? $records->get() : $records->paginate(self::PAGE_SIZE),
             'report' => $report,
             'minDate' => $dateRange->min,
             'maxDate' => $dateRange->max

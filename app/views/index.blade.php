@@ -60,7 +60,7 @@
     @endforeach
     <tr>
         <td></td>
-        <td colspan="2">&sum;: <span id="time-sum">{{ round($sum, 2) }}</span></td>
+        <td colspan="2">&sum;: <span id="time-sum"></span></td>
         <td></td>
     </tr>
 </table>

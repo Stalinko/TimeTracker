@@ -13,6 +13,10 @@ define([
             'focus .input-date': 'initDatepicker'
         },
 
+        initialize: function(){
+            this.updateSum();
+        },
+
         initDatepicker: function(e){
             $(e.currentTarget).datepicker();
         },
