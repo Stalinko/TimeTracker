@@ -34,3 +34,9 @@
 .make-report {
   width: 400px;
 }
+.settings {
+  margin-bottom: 20px;
+}
+.bootstrap-switch-wrapper {
+  width: 130px;
+}

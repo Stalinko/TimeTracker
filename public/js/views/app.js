@@ -16,6 +16,12 @@ define([
             new TimetableLogicView();
             new TimetableBeautyView();
             new MakeReportView();
+
+            $('.field-format-switcher').bootstrapSwitch({
+                onSwitchChange: function(e, state){
+                    window.eventManager.trigger('time-switcher:change', state);
+                }
+            });
         }
     });
 });

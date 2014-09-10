@@ -1,4 +1,7 @@
 <div class="row">
+    <div class="col-lg-12 settings">
+        Time field format: <input type="checkbox" data-on-text="amount" data-off-text="range" class="field-format-switcher" checked>
+    </div>
     <div class="col-lg-12">
         <div class="pull-right ">
             @if (Auth::check())
