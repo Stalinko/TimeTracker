@@ -15,6 +15,8 @@ class IndexController extends BaseController {
 	|
 	*/
 
+    const PAGE_SIZE = 20;
+
     /**
      * Главная страница
      */
@@ -23,16 +25,39 @@ class IndexController extends BaseController {
             return Redirect::to('/enter');
         }
 
-        $records = Record::
-            where('user_id', Auth::id())
+        $dateFrom = Input::get('date-from');
+        $dateTo = Input::get('date-to');
+
+        $model = Record::getModel();
+        $report = false;
+
+        if(preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateFrom)){
+            $report = true;
+            $model = $model->where('date', '>=', $dateFrom);
+        }
+        if(preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateTo)){
+            $report = true;
+            $model = $model->where('date', '<=', $dateTo);
+        }
+
+        $dateRange = DB::table('records')->select(DB::raw('min(date) `min`, max(date) `max`'))->where('user_id', Auth::id())->first();
+
+        $records = $model
+            ->where('user_id', Auth::id())
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(self::PAGE_SIZE);
 
-        $sum = array_reduce($records->toArray(), function($sum, $row){
+        $sum = array_reduce($records->getCollection()->toArray(), function($sum, $row){
             return $sum + $row['time'];
         }, 0);
-        $this->layout->content = View::make('index', ['records' => $records, 'sum' => $sum]);
+        $this->layout->content = View::make('index', [
+            'records' => $records,
+            'sum' => $sum,
+            'report' => $report,
+            'minDate' => $dateRange->min,
+            'maxDate' => $dateRange->max
+        ]);
     }
 
     /**

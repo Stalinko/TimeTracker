@@ -6,6 +6,20 @@
             <a class="btn btn-danger" href="/logout">Logout</a>
             @endif
         </div>
+
+        {{ $records->appends(Input::only('date-from', 'date-to'))->links()  }}
+
+        <form class="input-group make-report pull-left" method="get">
+            <input type="text" class="form-control date-to" placeholder="Date from..." name="date-from" value="{{{ Input::get('date-from') }}}">
+            <span class="input-group-btn" style="width:0"></span>
+            <input type="text" class="form-control date-from" placeholder="...date to" style="margin-left: -1px;" name="date-to" value="{{{ Input::get('date-to') }}}">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" style="margin-left: -2px;">Make report</button>
+                @if($report)
+                <button type="button" class="btn btn-danger btn-reset" style="margin-left: -2px;">Reset</button>
+                @endif
+            </span>
+        </form><!-- /input-group -->
     </div>
 
     @if ($success = Session::get('success'))
@@ -14,7 +28,9 @@
         {{{ $success }}}
     </div>
     @endif
+
 </div>
+
 
 <table class="table table-condensed timetable">
     <tr>
@@ -24,9 +40,9 @@
         <th>&nbsp;</th>
     </tr>
     <tr class="row-input" id="row-add">
-        <td data-toggle="popover"><input class="input-date" value="{{ date('Y-m-d') }}" data-toggle="tooltip" data-placement="top" title="Date in format &quot;yyyy-mm-dd&quot;"></td>
-        <td><input class="input-time" title="Format like 19.5 or 12:45"></td>
-        <td><input class="input-desc" title=""></td>
+        <td data-toggle="popover"><input class="input-date" value="{{ date('Y-m-d') }}" placeholder="yyyy-mm-dd" data-toggle="tooltip" data-placement="top" title="Date in format &quot;yyyy-mm-dd&quot;"></td>
+        <td><input class="input-time" title="Format like 19.5 or 12:45" placeholder="HH:MM"></td>
+        <td><input class="input-desc" title="" placeholder="Some great job has been done"></td>
         <td><button class="btn btn-default" id="btn-add">Add record</button></td>
     </tr>
     @foreach($records as $row)
@@ -46,3 +62,12 @@
         <td></td>
     </tr>
 </table>
+
+<div class="row">
+{{ $records->appends(Input::only('date-from', 'date-to'))->links()  }}
+</div>
+
+<script>
+    var minDate = '{{{ $minDate }}}',
+        maxDate = '{{{ $maxDate }}}';
+</script>

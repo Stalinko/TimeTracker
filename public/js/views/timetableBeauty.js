@@ -5,7 +5,7 @@ define([], function () {
     return Backbone.View.extend({
         el: '.timetable',
         dateHighlight: '', //строки за эту дату подсвечены в данный момент
-        highlightColor: '#DEFFE5',
+        highlightColor: '#D6FBFF',
         events: {
             'mouseenter .row-record': 'hoverDaySumEnter',
             'mouseleave .row-record': 'hoverDaySumLeave'

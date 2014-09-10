@@ -14,10 +14,7 @@ define([
         },
 
         initDatepicker: function(e){
-            $(e.currentTarget).datepicker({
-                dateFormat: 'yy-mm-dd',
-                firstDay: 1
-            });
+            $(e.currentTarget).datepicker();
         },
 
         rowTemplate: _.template(

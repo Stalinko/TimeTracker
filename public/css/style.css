@@ -28,3 +28,9 @@
 .hint-sum {
   font-size: 20px;
 }
+.pagination {
+  margin: 0 10px 10px 10px !important;
+}
+.make-report {
+  width: 400px;
+}
