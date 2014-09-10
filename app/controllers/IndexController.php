@@ -31,6 +31,7 @@ class IndexController extends BaseController {
         $model = Record::getModel();
         $report = false;
 
+        //report ranges
         if(preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateFrom)){
             $report = true;
             $model = $model->where('date', '>=', $dateFrom);
@@ -45,12 +46,20 @@ class IndexController extends BaseController {
         $records = $model
             ->where('user_id', Auth::id())
             ->orderBy('date', 'desc')
-            ->orderBy('id', 'desc')
-            ->paginate(self::PAGE_SIZE);
+            ->orderBy('id', 'desc');
 
-        $sum = array_reduce($records->getCollection()->toArray(), function($sum, $row){
+        if($report){
+            $records = $records->get();
+            $array = $records->toArray();
+        }else{
+            $records = $records->paginate(self::PAGE_SIZE);
+            $array = $records->getCollection()->toArray();
+        }
+
+        $sum = array_reduce($array, function($sum, $row){
             return $sum + $row['time'];
         }, 0);
+
         $this->layout->content = View::make('index', [
             'records' => $records,
             'sum' => $sum,

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Record
+ * @method static Record getModel
+ */
 class Record extends Eloquent {
     protected $fillable = ['date', 'time', 'description'];
 

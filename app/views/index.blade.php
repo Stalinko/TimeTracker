@@ -7,7 +7,9 @@
             @endif
         </div>
 
+        @if(!$report)
         {{ $records->appends(Input::only('date-from', 'date-to'))->links()  }}
+        @endif
 
         <form class="input-group make-report pull-left" method="get">
             <input type="text" class="form-control date-to" placeholder="Date from..." name="date-from" value="{{{ Input::get('date-from') }}}">
@@ -63,9 +65,11 @@
     </tr>
 </table>
 
+@if(!$report)
 <div class="row">
 {{ $records->appends(Input::only('date-from', 'date-to'))->links()  }}
 </div>
+@endif
 
 <script>
     var minDate = '{{{ $minDate }}}',
