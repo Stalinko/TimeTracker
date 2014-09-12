@@ -48,8 +48,8 @@
         <td data-toggle="popover"><input class="input-date" value="{{ date('Y-m-d') }}" placeholder="yyyy-mm-dd" data-toggle="tooltip" data-placement="top" title="Date in format &quot;yyyy-mm-dd&quot;"></td>
         <td>
             <input class="input-time" title="Format like 19.5 or 12:45" placeholder="hh:mm">
-            <input class="input-time-from" title="When the work was begun?" placeholder="hh:mm">
-            <input class="input-time-to" title="When the work was finished?" placeholder="hh:mm">
+            <input class="input-time-from" title="When was the work begun?" placeholder="hh:mm">
+            <input class="input-time-to" title="When was the work finished?" placeholder="hh:mm">
         </td>
         <td><input class="input-desc" title="" placeholder="Some great job has been done"></td>
         <td><button class="btn btn-default" id="btn-add">Add record</button></td>
