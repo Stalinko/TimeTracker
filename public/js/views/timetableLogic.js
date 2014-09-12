@@ -1,6 +1,7 @@
 define([
-    'models/record'
-], function (Record) {
+    'models/record',
+    'collections/records'
+], function (Record, RecordsCollection) {
     return Backbone.View.extend({
         el: '.timetable',
         events: {
@@ -12,15 +13,29 @@ define([
             'keyup .row-input input': 'onKeyUp',
             'focus .input-date': 'initDatepicker'
         },
+        rowAdd: null,
+        records: null,
+        isTimeAmount: true, //вид инпутов для времени
 
         initialize: function(){
             window.eventManager.on('record:add record:update', this.updateSum, this);
-
-            this.updateSum();
+            window.eventManager.on('time-switcher:change', this.changeTimeInput, this);
+            this.records = new RecordsCollection(window.appData.records);
+            this.rowAdd = $('#row-add');
         },
+
 
         initDatepicker: function(e){
             $(e.currentTarget).datepicker();
+        },
+
+        render: function(){
+            var that = this;
+            this.records.each(function(record){
+                that.rowAdd.after(that.rowTemplate(record.getAttrsFormatted()));
+            });
+
+            this.updateSum();
         },
 
         rowTemplate: _.template(
@@ -38,16 +53,20 @@ define([
         rowEditTemplate: _.template(
             '<tr class="row-input" data-id="<%- id %>">' +
             '<td><input class="input-date" value="<%- date %>"></td>' +
-            '<td><input class="input-time" value="<%- time %>"></td>' +
-            '<td><input class="input-desc" value="<%- desc %>"></td>' +
+            '<td>' +
+                '<input class="input-time" value="<%- time %>">' +
+                '<input class="input-time-from" title="When the work was begun?" placeholder="hh:mm" value="<%- timeFrom %>"> ' +
+                '<input class="input-time-to" title="When the work was finished?" placeholder="hh:mm" value="<%- timeTo %>">' +
+            '</td>' +
+            '<td><input class="input-desc" value="<%- description %>"></td>' +
             '<td><button class="btn btn-default btn-update">Save record</button></td>' +
             '</tr>'
         ),
 
         //Adding new record
         addRecord: function () {
-            var record = new Record({row: $('#row-add')});
-            record.save({}, {
+            var record = new Record();
+            record.populate(this.rowAdd).save({}, {
                 success: _.bind(this.successAdd, this),
                 error: _.bind(this.errorSave, this)
             });
@@ -57,25 +76,28 @@ define([
          * @Record model
          */
         successAdd: function (model) {
-            model.row.find('input').popover('destroy');
+            this.rowAdd.find('input').popover('destroy');
 
-            $(this.rowTemplate(model.getAttrsFormatted())).insertAfter(model.row);
+            $(this.rowTemplate(model.getAttrsFormatted())).insertAfter(this.rowAdd);
 
-            model.row.find('.input-time, .input-desc').val('');
-            model.row.find('.input-time').focus();
+            this.rowAdd.find('.input-time, .input-desc, .input-time-from, .input-time-to').val('');
+            this.rowAdd.find('.input-time').focus();
 
+            this.records.add(model);
             window.eventManager.trigger('record:add', model);
         },
 
         successUpdate: function (model) {
-            model.row.find('input').popover('destroy');
-            model.row.replaceWith(this.rowTemplate(model.getAttrsFormatted()));
+            var row = model.getRow();
+
+            row.find('input').popover('destroy');
+            row.replaceWith(this.rowTemplate(model.getAttrsFormatted()));
 
             window.eventManager.trigger('record:update', model);
         },
 
         errorSave: function (model, result) {
-            this.showErrors(model.row, result.responseJSON);
+            this.showErrors(model.getRow(), result.responseJSON);
         },
 
         //delete
@@ -86,7 +108,7 @@ define([
             var parent = $(e.currentTarget).parents('.row-record'),
                 id = parent.data('id');
 
-            (new Record({id: id})).destroy({
+            this.records.get(id).destroy({
                 success: function () {
                     parent.remove();
                 }
@@ -95,24 +117,30 @@ define([
 
         //edit
         editRecord: function (e) {
-            var row = $(e.currentTarget).parents('.row-record'),
-                record = {id: row.data('id')};
+            var row = $(e.currentTarget).parents('.row-record');
 
             if (row.attr('id') == 'row-add') {
                 return;
             }
 
-            _.each(['date', 'time', 'desc'], function (name) {
-                record[name] = row.find('.col-' + name).text();
-            });
-
-            row.replaceWith(this.rowEditTemplate(record));
+            var id = row.data('id'),
+                record = this.records.get(id),
+                rowEdit = $(this.rowEditTemplate(record.getAttrsFormatted()));
+            row.replaceWith(rowEdit);
+            rowEdit.find('.input-time, .input-time-from').focus();
         },
 
         //Save edited record
         updateRecord: function (e) {
-            var parent = $(e.currentTarget).parents('.row-input'),
-                record = new Record({row: parent});
+            var row = $(e.currentTarget).parents('.row-input'),
+                id = row.data('id'),
+                record = this.records.get(id).populate(row);
+
+            if(this.isTimeAmount){
+                record.unset('timeFrom').unset('timeTo');
+            }else{
+                record.unset('time');
+            }
 
             record.save({}, {
                 success: _.bind(this.successUpdate, this),
@@ -122,19 +150,32 @@ define([
 
         //обработка нажатий клавиш
         onKeyUp: function (e) {
+            var focus = $(document.activeElement),
+                row = focus.parents('.row-input');
             if (e.which == 13) {
-                var focus = $(document.activeElement),
-                    row = focus.parents('.row-input');
-                switch (true) {
-                    case focus.hasClass('input-date'):
-                        row.find('.input-time').focus();
-                        break;
-                    case focus.hasClass('input-time'):
-                        row.find('.input-desc').focus();
-                        break;
-                    case focus.hasClass('input-desc'):
-                        row.find('.btn').click();
-                        break;
+                var nextMap = {
+                    'input-date': '.input-time',
+                    'input-time': '.input-desc',
+                    'input-time-from': '.input-time-to',
+                    'input-time-to': '.input-desc'
+                };
+
+                _.each(nextMap, function(next, current){
+                    if(focus.hasClass(current)){
+                        row.find(next).focus();
+                    }
+                });
+
+                if(focus.hasClass('input-desc')){
+                    row.find('.btn').click();
+                }
+            }else if(e.which == 27){
+                if(row.length && row.attr('id') != 'row-add'){
+                    var id = row.data('id'),
+                        model = this.records.get(id);
+
+                    row.find('input').popover('destroy');
+                    row.replaceWith(this.rowTemplate(model.getAttrsFormatted()));
                 }
             }
         },
@@ -143,9 +184,19 @@ define([
         showErrors: function (row, errors) {
             var top = true;
 
+            if(this.isTimeAmount){
+                delete errors.timeFrom;
+                delete errors.timeTo;
+            }else{
+                delete errors.time;
+            }
+
             _.each(errors, function (list, field) {
                 field = field.replace('description', 'desc');
-                row.find('.input-' + field).popover({
+                field = field.replace('timeFrom', 'time-from');
+                field = field.replace('timeTo', 'time-to');
+
+                row.find('.input-' + field).popover('destroy').popover({
                     content: '<span class="text-danger">' + _.first(list) + '</span>',
                     placement: top ? 'top' : 'bottom',
                     html: true
@@ -158,11 +209,16 @@ define([
         //recalculate sum
         updateSum: function () {
             var sum = 0;
-            $('.col-time').each(function () {
-                sum += parseFloat($(this).text());
+            this.records.each(function(record){
+                sum += parseFloat(record.get('time'));
             });
 
             $('#time-sum').text(Math.round(sum * 100) / 100);
+        },
+
+        changeTimeInput: function(state){
+            this.isTimeAmount = state;
+            this.$el.toggleClass('range-times');
         }
     });
 });

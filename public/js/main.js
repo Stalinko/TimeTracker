@@ -5,11 +5,13 @@ require.config({
         underscore: 'libs/underscore-min',
         backbone: 'libs/backbone-min',
         bootstrap: 'libs/bootstrap.min',
-        appView: 'views/app'
+        appView: 'views/app',
+        bootstrapSwitch: 'libs/bootstrap-switch.min'
     },
     shim: {
         'bootstrap': {deps: ['jquery']},
-        'appView': {deps: ['backbone']}
+        'appView': {deps: ['backbone']},
+        'bootstrapSwitch': {deps: ['bootstrap']}
     }
 });
 
@@ -20,7 +22,8 @@ require([
     'jquery',
     'libs/jquery-ui',
     'bootstrap',
-    'underscore'
+    'underscore',
+    'bootstrapSwitch'
 ], function (b,AppView) {
     new AppView();
 });

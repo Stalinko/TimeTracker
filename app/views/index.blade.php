@@ -1,4 +1,7 @@
 <div class="row">
+    <div class="col-lg-12 settings">
+        Time field format: <input type="checkbox" data-on-text="amount" data-off-text="range" class="field-format-switcher" checked>
+    </div>
     <div class="col-lg-12">
         <div class="pull-right ">
             @if (Auth::check())
@@ -43,22 +46,14 @@
     </tr>
     <tr class="row-input" id="row-add">
         <td data-toggle="popover"><input class="input-date" value="{{ date('Y-m-d') }}" placeholder="yyyy-mm-dd" data-toggle="tooltip" data-placement="top" title="Date in format &quot;yyyy-mm-dd&quot;"></td>
-        <td><input class="input-time" title="Format like 19.5 or 12:45" placeholder="HH:MM"></td>
+        <td>
+            <input class="input-time" title="Format like 19.5 or 12:45" placeholder="hh:mm">
+            <input class="input-time-from" title="When the work was begun?" placeholder="hh:mm">
+            <input class="input-time-to" title="When the work was finished?" placeholder="hh:mm">
+        </td>
         <td><input class="input-desc" title="" placeholder="Some great job has been done"></td>
         <td><button class="btn btn-default" id="btn-add">Add record</button></td>
-    </tr>
-    @foreach($records as $row)
-    <tr data-id="{{ $row->id }}" class="row-record">
-        <td class="col-date">{{ $row->date }}</td>
-        <td class="col-time">{{ round($row->time, 2) }}</td>
-        <td class="col-desc">{{ $row->description }}</td>
-        <td>
-              <a class="btn-edit" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;&nbsp;
-              <a class="btn-delete" title="Remove"><span class="glyphicon glyphicon-trash"></span></a>
-        </td>
-    </tr>
-    @endforeach
-    <tr>
+    </tr><tr>
         <td></td>
         <td colspan="2">&sum;: <span id="time-sum"></span></td>
         <td></td>
@@ -72,6 +67,7 @@
 @endif
 
 <script>
-    var minDate = '{{{ $minDate }}}',
-        maxDate = '{{{ $maxDate }}}';
+    appData['minDate'] = '{{{ $minDate }}}';
+    appData['maxDate'] = '{{{ $maxDate }}}';
+    appData['records'] =  {{ json_encode($report ? $records->toArray() : $records->getCollection()->toArray(), JSON_UNESCAPED_UNICODE) }};
 </script>

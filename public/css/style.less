@@ -17,6 +17,13 @@
     width: 70%;
   }
 
+  .input-time-from, .input-time-to{
+    display: none;
+  }
+  .input-time{
+    display: inline-block;
+  }
+
   .row-input {
 
     &:hover, &:hover td, &:hover th {
@@ -29,6 +36,27 @@
       margin-top: 5px;
     }
   }
+
+  //модификатор
+  &.range-times{
+    .col-time {
+      width: 10%;
+    }
+
+    .col-desc {
+      width: 65%;
+    }
+
+    .input-time-from, .input-time-to{
+      width: 48%;
+      display: inline-block;
+    }
+    .input-time{
+      display: none;
+    }
+  }
+
+
 }
 
 .hint-sum {
@@ -41,4 +69,12 @@
 
 .make-report{
   width: 400px;
+}
+
+.settings{
+  margin-bottom: 20px;
+}
+
+.bootstrap-switch-wrapper{
+  width: 130px;
 }
