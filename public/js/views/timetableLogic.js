@@ -22,8 +22,15 @@ define([
             window.eventManager.on('time-switcher:change', this.changeTimeInput, this);
             this.records = new RecordsCollection(window.appData.records);
             this.rowAdd = $('#row-add');
-        },
 
+            if(localStorage.getItem('isTimeAmount') !== null){
+                this.isTimeAmount = localStorage.getItem('isTimeAmount') == 'true';
+                if(!this.isTimeAmount){
+                    $('.field-format-switcher').attr('checked', false);
+                    this.$el.addClass('range-times');
+                }
+            }
+        },
 
         initDatepicker: function(e){
             $(e.currentTarget).datepicker();
@@ -217,7 +224,7 @@ define([
         },
 
         changeTimeInput: function(state){
-            this.isTimeAmount = state;
+            this.isTimeAmount = localStorage['isTimeAmount'] = state;
             this.$el.toggleClass('range-times');
         }
     });
