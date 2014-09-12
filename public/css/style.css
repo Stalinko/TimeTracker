@@ -13,6 +13,13 @@
 .timetable .col-desc {
   width: 70%;
 }
+.timetable .input-time-from,
+.timetable .input-time-to {
+  display: none;
+}
+.timetable .input-time {
+  display: inline-block;
+}
 .timetable .row-input {
   background: #f0f0f0 !important;
 }
@@ -24,6 +31,20 @@
 .timetable .row-input input {
   width: 100%;
   margin-top: 5px;
+}
+.timetable.range-times .col-time {
+  width: 10%;
+}
+.timetable.range-times .col-desc {
+  width: 65%;
+}
+.timetable.range-times .input-time-from,
+.timetable.range-times .input-time-to {
+  width: 48%;
+  display: inline-block;
+}
+.timetable.range-times .input-time {
+  display: none;
 }
 .hint-sum {
   font-size: 20px;

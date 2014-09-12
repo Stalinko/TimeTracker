@@ -14,8 +14,6 @@ define([], function () {
             var rowAdd = $('#row-add');
             rowAdd.find('.input-time').focus();
             rowAdd.find('input').tooltip();
-
-            window.eventManager.on('time-switcher:change', this.changeTimeInput, this);
         },
 
         hoverDaySumEnter: function(e){
@@ -53,10 +51,6 @@ define([], function () {
                     .tooltip('destroy');
                 this.dateHighlight = '';
             }
-        },
-
-        changeTimeInput: function(state){
-            
         }
     });
 });
