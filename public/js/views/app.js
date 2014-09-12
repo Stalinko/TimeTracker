@@ -13,9 +13,9 @@ define([
 
             window.eventManager = _.extend({}, Backbone.Events);
 
-            new TimetableLogicView();
-            new TimetableBeautyView();
-            new MakeReportView();
+            (new TimetableLogicView()).render();
+            (new TimetableBeautyView()).render();
+            (new MakeReportView()).render();
 
             $('.field-format-switcher').bootstrapSwitch({
                 onSwitchChange: function(e, state){

@@ -49,19 +49,7 @@
         <td><input class="input-time" title="Format like 19.5 or 12:45" placeholder="HH:MM"></td>
         <td><input class="input-desc" title="" placeholder="Some great job has been done"></td>
         <td><button class="btn btn-default" id="btn-add">Add record</button></td>
-    </tr>
-    @foreach($records as $row)
-    <tr data-id="{{ $row->id }}" class="row-record">
-        <td class="col-date">{{ $row->date }}</td>
-        <td class="col-time">{{ round($row->time, 2) }}</td>
-        <td class="col-desc">{{ $row->description }}</td>
-        <td>
-              <a class="btn-edit" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;&nbsp;
-              <a class="btn-delete" title="Remove"><span class="glyphicon glyphicon-trash"></span></a>
-        </td>
-    </tr>
-    @endforeach
-    <tr>
+    </tr><tr>
         <td></td>
         <td colspan="2">&sum;: <span id="time-sum"></span></td>
         <td></td>
@@ -75,6 +63,7 @@
 @endif
 
 <script>
-    var minDate = '{{{ $minDate }}}',
-        maxDate = '{{{ $maxDate }}}';
+    appData['minDate'] = '{{{ $minDate }}}';
+    appData['maxDate'] = '{{{ $maxDate }}}';
+    appData['records'] =  {{ json_encode($report ? $records->toArray() : $records->getCollection()->toArray(), JSON_UNESCAPED_UNICODE) }};
 </script>

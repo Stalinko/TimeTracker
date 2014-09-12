@@ -9,6 +9,7 @@
     <link href="css/style.css" rel="stylesheet" media="screen">
     <link href="css/bootstrap-switch.min.css" rel="stylesheet" media="screen">
     <link href="css/jquery-ui-1.11.1.custom/jquery-ui.min.css" rel="stylesheet" media="screen">
+    <script>var appData = {};</script>
 </head>
 <body>
 <div class="container-fluid">

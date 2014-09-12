@@ -8,8 +8,8 @@ define([], function () {
         maxDate: '',
         initialize: function () {
             this.$el.find('.date-from, .date-to').datepicker({
-                minDate: this.minDate = window.minDate,
-                maxDate: this.maxDate = window.maxDate
+                minDate: this.minDate = window.appData.minDate,
+                maxDate: this.maxDate = window.appData.maxDate
             });
 
             window.eventManager.on('record:add record:update', this.updateMinMax, this);
