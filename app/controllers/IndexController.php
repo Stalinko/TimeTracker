@@ -79,8 +79,9 @@ class IndexController extends BaseController {
 
         $email = Input::get('email');
         $password = Input::get('password');
+        $remember = Input::get('remember');
 
-        if(Auth::attempt(['email' => $email, 'password' => $password])){
+        if(Auth::attempt(['email' => $email, 'password' => $password], $remember)){
             Session::flash('logged_in', true);
             Session::flash('success', 'You logged in');
             return Redirect::to('/');
