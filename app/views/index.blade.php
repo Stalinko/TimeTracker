@@ -1,15 +1,6 @@
-<div class="row">
-    <div class="col-lg-12 settings">
+    <div class="settings">
         Time field format: <input type="checkbox" data-on-text="amount" data-off-text="range" class="field-format-switcher" checked>
     </div>
-    <div class="col-lg-12">
-        <div class="pull-right ">
-            @if (Auth::check())
-            You entered as <strong>{{{ Auth::getUser()->email }}}</strong>
-            <a class="btn btn-danger" href="/logout">Logout</a>
-            @endif
-        </div>
-
         @if(!$report)
         {{ $records->appends(Input::only('date-from', 'date-to'))->links()  }}
         @endif
@@ -25,7 +16,6 @@
                 @endif
             </span>
         </form><!-- /input-group -->
-    </div>
 
     @if ($success = Session::get('success'))
     <div class="alert alert-success col-lg-2 col-lg-offset-5">
@@ -34,8 +24,7 @@
     </div>
     @endif
 
-</div>
-
+<div class="clearfix"></div>
 
 <table class="table table-condensed timetable">
     <tr>

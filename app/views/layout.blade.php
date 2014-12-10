@@ -16,6 +16,14 @@
 <div class="container-fluid">
 
     <h1 class="text-center">Simple Time Tracker</h1>
+
+    <div class="pull-right">
+        @if (Auth::check())
+            You entered as <strong>{{{ Auth::getUser()->email }}}</strong>
+            <a class="btn btn-primary" href="/profile">Profile</a>
+            <a class="btn btn-danger" href="/logout">Logout</a>
+        @endif
+    </div>
     {{ $content }}
 
 </div>
